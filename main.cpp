@@ -111,6 +111,7 @@ int main () {
     std::vector<double> measure;
 
     wchar_t chFPS[32];
+    chFPS[31] = L'\0';
 
     SDL_Point mouse_coords;
     SDL_Point click_point;
@@ -188,7 +189,7 @@ int main () {
             }
             avg /= (double) measure.size();
             measure.clear();
-            swprintf (chFPS, L"%.2f FPS", avg);
+            swprintf (chFPS, 31, L"%.2f FPS", avg);
             delete fps;
             fps = new DrawableText(chFPS, 0, 0, {255, 255, 255, 255});
         }
