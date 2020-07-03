@@ -23,6 +23,7 @@ bool World::checkMouseClick (SDL_Point* mousepos, Uint8 mouse_button) {
             return true;
         }
     }
+    return false;
 }
 
 void World::drawWorld () {
