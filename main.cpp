@@ -92,11 +92,11 @@ int main () {
     ButtonImage* sr_slovenija = new ButtonImage(2, 100, 200, flag_select_callback, (void*)1);
     ButtonImage* av_cesarstvo = new ButtonImage(3, 100, 325, flag_select_callback, (void*)2);
     ButtonImage* sv_cesarstvo = new ButtonImage(4, 100, 450, flag_select_callback, (void*)3);
-    DrawableText* txt1 = new DrawableText(L"Slovenija", 400, 113, {255, 255, 255, 255});
-    DrawableText* txt2 = new DrawableText(L"SR Slovenija", 400, 238, {255, 255, 255, 255});
-    DrawableText* txt3 = new DrawableText(L"Avstrijsko Cesarstvo", 400, 363, {255, 255, 255, 255});
-    DrawableText* txt4 = new DrawableText(L"Sveto Rimsko Cesarstvo", 400, 488, {255, 255, 255, 255});
-    DrawableText* drzava = new DrawableText(L"Izberi Drzavo", 200, 10, {255, 255, 255, 255});
+    DrawableText* txt1 = new DrawableText("Slovenija", 400, 113, {255, 255, 255, 255});
+    DrawableText* txt2 = new DrawableText("SR Slovenija", 400, 238, {255, 255, 255, 255});
+    DrawableText* txt3 = new DrawableText("Avstrijsko Cesarstvo", 400, 363, {255, 255, 255, 255});
+    DrawableText* txt4 = new DrawableText("Sveto Rimsko Cesarstvo", 400, 488, {255, 255, 255, 255});
+    DrawableText* drzava = new DrawableText("Izberi Drzavo", 200, 10, {255, 255, 255, 255});
 
 
     World* world = new World({slovenija, sr_slovenija, av_cesarstvo, sv_cesarstvo, txt1, txt2, txt3, txt4, drzava});
@@ -107,11 +107,11 @@ int main () {
     timeNow = SDL_GetPerformanceCounter();
     //DrawableText* dtxt = new DrawableText("Testing SDL text (TTF)", 0, 0, {255, 255, 255, 255});
     DrawableImage* gamemap = new DrawableImage(0, 0, 0);
-    DrawableText* fps = new DrawableText(L"60 FPS", 0, 0, {255, 255, 255, 255});
+    DrawableText* fps = new DrawableText("60 FPS", 0, 0, {255, 255, 255, 255});
     std::vector<double> measure;
 
-    wchar_t chFPS[32];
-    chFPS[31] = L'\0';
+    char chFPS[32];
+    chFPS[31] = '\0';
 
     SDL_Point mouse_coords;
     SDL_Point click_point;
@@ -189,7 +189,7 @@ int main () {
             }
             avg /= (double) measure.size();
             measure.clear();
-            swprintf (chFPS, 31, L"%.2f FPS", avg);
+            sprintf (chFPS, "%.2f FPS", avg);
             delete fps;
             fps = new DrawableText(chFPS, 0, 0, {255, 255, 255, 255});
         }
