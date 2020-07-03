@@ -18,3 +18,12 @@ void DrawableImage::draw () {
 
     SDL_RenderCopy(renderer, image_texture, NULL, &dest);
 }
+
+
+SDL_Rect DrawableImage::getImageRect () {
+    SDL_Rect rect;
+    rect.x = x;
+    rect.y = y;
+    SDL_QueryTexture(image_texture, NULL, NULL, &rect.w, &rect.h);
+    return rect;
+}
