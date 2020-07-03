@@ -54,7 +54,7 @@ int main () {
     int window_height = DM.h;
     SDL_Window* window = SDL_CreateWindow("GAME", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, 0);
 
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+//    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
     renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -71,6 +71,10 @@ int main () {
     timeNow = SDL_GetPerformanceCounter();
     DrawableText* dtxt = new DrawableText("Testing SDL text (TTF)", 0, 0, {255, 255, 255, 255});
     DrawableImage* gamemap = new DrawableImage(0, 0, 0);
+    DrawableText* fps = new DrawableText("60 FPS", 0, 64, {255, 255, 255, 255});
+    std::vector<double> measure;
+
+    char chFPS[32];
 
     SDL_Point mouse_coords;
     SDL_Point click_point;
@@ -81,32 +85,37 @@ int main () {
     bool close = false;
     SDL_Event event;
     while (!close) {
-        SDL_PollEvent(&event);
-        if (event.type == SDL_QUIT) {
-            close = true;
-        }
-        else if (event.type == SDL_MOUSEMOTION) {
-            mouse_coords.x = event.motion.x;
-            mouse_coords.y = event.motion.y;
-            if (moving_map) {
-                gamemap->x = o_x + (mouse_coords.x - click_point.x);
-                gamemap->y = o_y + (mouse_coords.y - click_point.y);
+        while (SDL_PollEvent(&event)) {
+
+            if (event.type == SDL_QUIT) {
+                close = true;
             }
-        }
+            else if (event.type == SDL_MOUSEMOTION) {
+                mouse_coords.x = event.motion.x;
+                mouse_coords.y = event.motion.y;
+                if (moving_map) {
+		    //printf("Mousemotion\n");
+                    gamemap->x = o_x + (mouse_coords.x - click_point.x);
+                    gamemap->y = o_y + (mouse_coords.y - click_point.y);
+                }
+            }
+        //world->checkMouseOver(&mouse_coords);
+            if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (!moving_map && !world->checkMouseClick(&mouse_coords, event.button.button) && event.button.button == SDL_BUTTON_LEFT) {
+                    //printf("Mousedown!\n");
+		    click_point = mouse_coords;
+                    moving_map = true;
+                }
+            }
+            else if (event.type == SDL_MOUSEBUTTONUP) {
+                if (event.button.button == SDL_BUTTON_LEFT && moving_map) {
+                    moving_map = false;
+                    o_x = gamemap->x;
+                    o_y = gamemap->y;
+                }
+            }
+	}
         world->checkMouseOver(&mouse_coords);
-        if (event.type == SDL_MOUSEBUTTONDOWN) {
-            if (!world->checkMouseClick(&mouse_coords, event.button.button) && event.button.button == SDL_BUTTON_LEFT) {
-                click_point = mouse_coords;
-                moving_map = true;
-            }
-        }
-        else if (event.type == SDL_MOUSEBUTTONUP) {
-            if (event.button.button == SDL_BUTTON_LEFT && moving_map) {
-                moving_map = false;
-                o_x = gamemap->x;
-                o_y = gamemap->y;
-            }
-        }
 
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         //exit
@@ -115,7 +124,22 @@ int main () {
         // delta
         timeLast = timeNow;
         timeNow = SDL_GetPerformanceCounter();
-        deltaTime = (double)((timeNow - timeLast)*1000 / (double)SDL_GetPerformanceFrequency());
+        deltaTime = (double)((timeNow - timeLast)*0.001 / (double)SDL_GetPerformanceFrequency());
+
+	// FPS
+	measure.push_back(1.0/(deltaTime*1000.0));
+	if (measure.size() >= 20) {
+	    double avg = 0;
+	    for (double d : measure) {
+	        avg += d;
+	    }
+	    avg /= (double) measure.size();
+	    measure.clear();
+	    sprintf (chFPS, "%.2f FPS", avg);
+	    delete fps;
+	    fps = new DrawableText(chFPS, 0, 64, {255, 255, 255, 255});
+	}
+
 
         SDL_RenderClear (renderer);
         //printf("Drawing world ...\n");
@@ -123,6 +147,7 @@ int main () {
         //printf("Drawing text ...\n");
         gamemap->draw();
         dtxt->draw();
+	fps->draw();
         //printf("Done!\n");
         SDL_RenderPresent (renderer);
     }
