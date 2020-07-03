@@ -48,7 +48,11 @@ int main () {
     World* world = new World({});
 
     // Window creation
-    SDL_Window* window = SDL_CreateWindow("GAME", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    SDL_DisplayMode DM;
+    SDL_GetCurrentDisplayMode(0, &DM);
+    int window_width = DM.w;
+    int window_height = DM.h;
+    SDL_Window* window = SDL_CreateWindow("GAME", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, 0);
 
     SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
@@ -103,6 +107,10 @@ int main () {
                 o_y = gamemap->y;
             }
         }
+
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        //exit
+        if (state[SDL_SCANCODE_ESCAPE]) exit(EXIT_SUCCESS);
 
         // delta
         timeLast = timeNow;
