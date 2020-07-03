@@ -29,22 +29,22 @@ void ButtonImage::onMouseOver () {
 }
 
 void ButtonImage::draw () {
-    image->draw();
     if (isMouseOver) {
         isMouseOver = false;
         SDL_Rect rect;
-        rect.x = image_rect.x/4;
-        rect.y = image_rect.y/4;
-        rect.w = image_rect.w/4;
-        rect.h = image_rect.h/4;
-        float sx, sy;
+        rect.x = image_rect.x-4;
+        rect.y = image_rect.y-4;
+        rect.w = image_rect.w+8;
+        rect.h = image_rect.h+8;
+        /*float sx, sy;
         SDL_RenderGetScale(renderer, &sx, &sy);
-        SDL_RenderSetScale(renderer, 4.0f, 4.0f);
+        SDL_RenderSetScale(renderer, 4.0f, 4.0f);*/
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderSetScale(renderer, sx, sy);
+        //SDL_RenderSetScale(renderer, sx, sy);
     }
+    image->draw();
 }
 
 SDL_Rect ButtonImage::getRect () {
