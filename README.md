@@ -1,1 +1,1 @@
-sdl_game
+neki nej bi tle pisal
