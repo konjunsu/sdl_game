@@ -34,7 +34,7 @@ class DrawableText : public GameObject {
         int y;
         virtual void draw ();
         virtual void update (float delta) {}
-        DrawableText(const wchar_t* message, int _x, int _y, SDL_Color color);
+        DrawableText(const char* message, int _x, int _y, SDL_Color color);
         ~DrawableText();
 };
 
