@@ -13,7 +13,6 @@
 #include <SDL2/SDL_image.h>
 #include <vector>
 
-// Basic class. some neccessary methods and events
 class GameObject {
     public:
         virtual void draw () = 0;
